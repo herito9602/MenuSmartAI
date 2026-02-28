@@ -1,18 +1,18 @@
-<![CDATA[# 🍽️ MenuSmart AI
+# 🍽️ MenuSmart AI
 
-**MenuSmart AI** es una plataforma SaaS (Software as a Service) de menús digitales para restaurantes, potenciada por Inteligencia Artificial. Digitaliza tu carta, controla el stock en tiempo real y recibe recomendaciones estratégicas para aumentar tus ventas.
+**MenuSmart AI** es una plataforma SaaS de menús digitales para restaurantes, potenciada por Inteligencia Artificial. Digitaliza tu carta, controla el stock en tiempo real y recibe recomendaciones estratégicas para aumentar tus ventas.
 
 ---
 
 ## ✨ Características Principales
 
 | Característica | Descripción |
-| --- | --- |
-| 📱 **Menú Digital (QR)** | Vista mobile-first que los clientes abren escaneando un QR. Carga en <1 segundo. |
-| ⚡ **Stock en Tiempo Real** | Activa/desactiva platos al instante. Se refleja inmediatamente en el menú del cliente gracias a Supabase Realtime. |
-| 🤖 **Ingeniero de Menú IA** | Usa GPT-4o para analizar los datos de clicks y vistas, y genera recomendaciones estratégicas de precios y promociones. |
-| 🔐 **Panel de Administración** | Acceso protegido con sistema de sesión. Gestión completa de platos (añadir, editar, eliminar). |
-| 📊 **QR Dinámico** | Genera y descarga tu código QR personalizado listo para imprimir, apuntando siempre al dominio activo. |
+|---|---|
+| 📱 **Menú Digital (QR)** | Vista mobile-first que los clientes abren escaneando un QR. Carga en menos de 1 segundo. |
+| ⚡ **Stock en Tiempo Real** | Activa/desactiva platos al instante mediante Supabase Realtime. |
+| 🤖 **Ingeniero de Menú IA** | GPT-4o analiza clicks/vistas y genera recomendaciones de precios y promociones. |
+| 🔐 **Panel de Administración** | Acceso protegido con sesión. Gestión completa de platos (añadir, editar, eliminar). |
+| 📊 **QR Dinámico** | Genera y descarga tu código QR personalizado listo para imprimir. |
 
 ---
 
@@ -40,29 +40,23 @@ npm install
 
 ### 2. Configurar Variables de Entorno
 
-Crea un archivo `.env.local` en la raíz del proyecto con las siguientes variables:
+Crea un archivo `.env.local` en la raíz del proyecto:
 
 ```env
 # Supabase
 NEXT_PUBLIC_SUPABASE_URL=tu_supabase_project_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=tu_supabase_anon_key
 
-# OpenAI (opcional - hay fallback con datos simulados si no se configura)
+# OpenAI (opcional — hay fallback simulado si no se configura)
 OPENAI_API_KEY=tu_openai_api_key
 ```
 
-> **¿Cómo obtener las claves de Supabase?**
-> Entra a tu proyecto en [supabase.com](https://supabase.com) → **Project Settings** → **API Keys**.
+> **¿Dónde encuentro las claves de Supabase?**
+> Tu proyecto en [supabase.com](https://supabase.com) → **Project Settings** → **API Keys**.
 
 ### 3. Configurar la Base de Datos
 
-Ejecuta el script SQL completo en el **SQL Editor** de tu proyecto de Supabase:
-
-```
-supabase-setup.sql
-```
-
-Este script crea todas las tablas, activa Row Level Security (RLS) y habilita Supabase Realtime en la tabla `items`.
+Ejecuta el archivo `supabase-setup.sql` completo en el **SQL Editor** de tu proyecto de Supabase. El script crea todas las tablas, activa Row Level Security y habilita Realtime en la tabla `items`.
 
 ### 4. Ejecutar el Proyecto
 
@@ -79,57 +73,57 @@ Abre [http://localhost:3000](http://localhost:3000) en tu navegador.
 ```
 src/
 ├── app/
-│   ├── page.tsx                  # Landing page B2B (página comercial principal)
+│   ├── page.tsx                    # Landing page B2B (página comercial)
 │   ├── admin/
-│   │   ├── login/                # Pantalla de login (sin sidebar)
-│   │   ├── menu/                 # Editor de platos (CRUD completo)
-│   │   ├── qr/                   # Generador de códigos QR
-│   │   ├── analytics/            # Dashboard de IA Analytics
-│   │   └── settings/             # Configuración del restaurante
-│   ├── r/[restaurant-slug]/      # Vista pública del menú (lo que ven los clientes)
+│   │   ├── login/                  # Pantalla de login (sin sidebar)
+│   │   ├── menu/                   # Editor de platos (CRUD completo)
+│   │   ├── qr/                     # Generador de códigos QR
+│   │   ├── analytics/              # Dashboard de AI Analytics
+│   │   └── settings/               # Configuración del restaurante
+│   ├── r/[restaurant-slug]/        # Vista pública del menú (clientes)
 │   └── api/
-│       └── ai-analyze/           # API Route → OpenAI GPT-4o
+│       └── ai-analyze/             # API Route → OpenAI GPT-4o
 ├── components/
-│   ├── ui/                       # Componentes base de Shadcn/UI
-│   └── menu/                     # DishCard, CategoryNav
+│   ├── ui/                         # Componentes base de Shadcn/UI
+│   └── menu/                       # DishCard, CategoryNav
 ├── lib/
-│   └── supabase.ts               # Cliente de Supabase
-└── middleware.ts                 # Protección de rutas /admin (sesión cookie)
+│   └── supabase.ts                 # Cliente de Supabase
+└── middleware.ts                   # Protección de rutas /admin
 ```
 
 ---
 
-## 🔐 Autenticación (Demo)
+## 🔐 Acceso Demo
 
-El sistema de login usa una **cookie de sesión simulada** para proteger las rutas del panel:
+| Campo | Valor |
+|---|---|
+| URL | `/admin/login` |
+| Email | `demo@menusmart.ai` |
+| Contraseña | `demo1234` |
+| Sesión | Cookie de 24 horas |
 
-- **URL:** `/admin/login`
-- **Email:** `demo@menusmart.ai`
-- **Contraseña:** `demo1234`
-- **Sesión:** Dura 24 horas. Al cerrar sesión, la cookie se borra y se bloquea el acceso.
-
-> ⚠️ En producción, esto debe reemplazarse con **Supabase Auth** para autenticación real con usuarios y contraseñas encriptadas.
+> ⚠️ En producción, esto debe reemplazarse con **Supabase Auth**.
 
 ---
 
 ## 🗄️ Esquema de Base de Datos
 
 | Tabla | Descripción |
-| --- | --- |
+|---|---|
 | `restaurants` | Perfil del local (nombre, slug, logo, moneda) |
-| `categories` | Categorías del menú (Entradas, Postres, etc.) |
-| `items` | Platos individuales con `is_available` para Realtime |
-| `analytics` | Registro de clicks y vistas por plato |
+| `categories` | Categorías del menú |
+| `items` | Platos con `is_available` para Realtime |
+| `analytics` | Clicks y vistas por plato |
 | `ai_reports` | Historial de reportes generados por GPT-4o |
 
 ---
 
 ## 🗺️ Roadmap
 
-- [ ] Autenticación real con **Supabase Auth**
-- [ ] Conexión completa de CRUD a Supabase (sin datos simulados)
-- [ ] Tracking de analytics en tiempo real (clicks por plato)
-- [ ] Sistema multi-tenant (múltiples restaurantes en una misma plataforma)
+- [ ] Autenticación real con Supabase Auth
+- [ ] Conexión completa de CRUD a Supabase
+- [ ] Tracking de analytics en tiempo real
+- [ ] Sistema multi-tenant (múltiples restaurantes)
 - [ ] Dashboard de métricas con gráficas
 - [ ] Despliegue en producción (Vercel + dominio propio)
 
@@ -138,4 +132,3 @@ El sistema de login usa una **cookie de sesión simulada** para proteger las rut
 ## 📄 Licencia
 
 MIT — Libre para uso personal y comercial.
-]]>
